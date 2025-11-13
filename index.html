@@ -100,12 +100,12 @@
         <p class="subtitle">Interactive Module Visualization</p>
         
         <div class="modules">
-            <button class="module-btn active" onclick="showModule('efficientnet', this)">EfficientNet-B3</button>
-            <button class="module-btn" onclick="showModule('graph', this)">Graph Construction</button>
-            <button class="module-btn" onclick="showModule('involution', this)">Involution Layers</button>
-            <button class="module-btn" onclick="showModule('aggregation', this)">Feature Aggregation</button>
-            <button class="module-btn" onclick="showModule('architecture', this)">Full Architecture</button>
-            <button class="module-btn" onclick="showModule('attention', this)">Attention</button>
+            <button class="module-btn active" onclick="showModule('efficientnet')">EfficientNet-B3</button>
+            <button class="module-btn" onclick="showModule('graph')">Graph Construction</button>
+            <button class="module-btn" onclick="showModule('involution')">Involution Layers</button>
+            <button class="module-btn" onclick="showModule('aggregation')">Feature Aggregation</button>
+            <button class="module-btn" onclick="showModule('architecture')">Full Architecture</button>
+            <button class="module-btn" onclick="showModule('attention')">Attention</button>
         </div>
 
         <div class="content-area" id="content">
@@ -121,10 +121,10 @@
     <script>
         let currentChart = null;
 
-        function showModule(module, button) {
+        function showModule(module) {
             // Update button states
             document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            event.target.classList.add('active');
 
             // Destroy previous chart
             if (currentChart) {
@@ -504,10 +504,7 @@
         }
 
         // Initialize with first module
-        window.onload = function() {
-            const firstButton = document.querySelector('.module-btn');
-            showModule('efficientnet', firstButton);
-        };
+        showModule('efficientnet');
     </script>
 </body>
 </html>
