@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Graph Involution Network - Interactive Visualization&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="root"&gt;&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/babel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const { useState } = React;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } = Recharts;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Lucide icons as SVG components</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const Network = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const Layers = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const GitBranch = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const Activity = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const Database = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const Zap = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ModuleVisualizer = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const [activeModule, setActiveModule] = useState('efficientnet');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const efficientNetData = [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Input', dim: 240*240*3, features: 172800 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Block 1', dim: 120*120*40, features: 576000 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Block 2', dim: 60*60*80, features: 288000 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Block 3', dim: 30*30*192, features: 172800 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Block 4', dim: 15*15*384, features: 86400 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Block 5', dim: 8*8*1536, features: 98304 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'GAP', dim: 1536, features: 1536 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ stage: 'Refined', dim: 1536, features: 1536 }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const generateSimilarityMatrix = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const size = 10;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const matrix = [];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let i = 0; i &lt; size; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>for (let j = 0; j &lt; size; j++) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>const similarity = i === j ? 1.0 : Math.max(0, 1 - Math.abs(i - j) * 0.15 + (Math.random() - 0.5) * 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>matrix.push({ x: i, y: j, value: similarity });</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return matrix;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const similarityMatrix = generateSimilarityMatrix();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const graphNodes = Array.from({ length: 10 }, (_, i) =&gt; ({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>id: i,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>connections: Math.floor(Math.random() * 4) + 3,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>degree: Math.floor(Math.random() * 6) + 2</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const involutionData = [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'Input', kernelSize: 7, groups: 4, params: 1536 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-1', kernelSize: 7, groups: 4, params: 512 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-2', kernelSize: 7, groups: 4, params: 256 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-3', kernelSize: 7, groups: 2, params: 128 }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const aggregationData = [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Node Features', value: 100 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Kernel Gen', value: 85 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Neighbor Select', value: 70 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Weighted Agg', value: 55 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Group Fusion', value: 40 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ step: 'Output', value: 100 }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const featureReduction = [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'Extractor', features: 1536, neurons: 1536 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-1', features: 512, neurons: 512 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-2', features: 256, neurons: 256 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'GIN-3', features: 128, neurons: 128 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'Classifier', features: 64, neurons: 64 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ layer: 'Output', features: 5, neurons: 5 }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const attentionWeights = Array.from({ length: 32 }, (_, i) =&gt; ({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>sample: i + 1,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>weight: Math.random() * 0.8 + 0.2</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const getColorForValue = (value) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const intensity = Math.floor(value * 255);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return `rgb(${255 - intensity}, ${100}, ${intensity})`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modules = [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'efficientnet', name: 'EfficientNet-B3', icon: Layers, color: 'bg-blue-500' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'graph', name: 'Graph Construction', icon: Network, color: 'bg-green-500' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'involution', name: 'Involution Layers', icon: GitBranch, color: 'bg-purple-500' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'aggregation', name: 'Feature Aggregation', icon: Activity, color: 'bg-orange-500' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'architecture', name: 'Full Architecture', icon: Database, color: 'bg-red-500' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id: 'attention', name: 'Attention Mechanism', icon: Zap, color: 'bg-yellow-500' }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="max-w-7xl mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h1 className="text-4xl font-bold text-white mb-2 text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>Graph Involution Network Architecture</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="text-gray-300 text-center mb-8"&gt;Interactive Module Visualization&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{modules.map((module) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>const Icon = module.icon;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;button</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>key={module.id}</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>onClick={() =&gt; setActiveModule(module.id)}</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>className={`p-4 rounded-lg transition-all duration-300 ${</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>activeModule === module.id</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>? `${module.color} text-white shadow-lg scale-105`</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>: 'bg-gray-700 text-gray-300 hover:bg-gray-600'</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>}`}</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="flex justify-center mb-2"&gt;&lt;Icon /&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;p className="text-sm font-medium text-center"&gt;{module.name}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>);</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div className="bg-gray-800 rounded-lg p-6 shadow-2xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'efficientnet' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;EfficientNet-B3 Feature Extraction&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;p className="text-gray-300 mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>Progressive feature dimensionality reduction from 240×240×3 input to 1536-dimensional feature vector</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;ResponsiveContainer width="100%" height={400}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;LineChart data={efficientNetData}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;XAxis dataKey="stage" stroke="#9CA3AF" angle={-45} textAnchor="end" height={100} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;YAxis stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Legend /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Line type="monotone" dataKey="features" stroke="#3B82F6" strokeWidth={3} name="Total Features" dot={{ r: 6 }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/LineChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="mt-6 grid grid-cols-2 gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="bg-gray-700 p-4 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-gray-400 text-sm"&gt;Input Dimensions&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-2xl font-bold text-blue-400"&gt;240 × 240 × 3&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="bg-gray-700 p-4 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-gray-400 text-sm"&gt;Output Features&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-2xl font-bold text-blue-400"&gt;1536-D Vector&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'graph' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;Adaptive Graph Construction&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;p className="text-gray-300 mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>Cosine similarity matrix with adaptive thresholding (μ + 0.5σ) to create graph adjacency</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="grid grid-cols-1 lg:grid-cols-2 gap-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;h3 className="text-lg font-semibold text-white mb-3"&gt;Similarity Matrix (10×10 samples)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;div className="grid grid-cols-10 gap-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>{similarityMatrix.map((cell, idx) =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;div</p>
+<p class="p1"><span class="Apple-converted-space">                                                        </span>key={idx}</p>
+<p class="p1"><span class="Apple-converted-space">                                                        </span>className="aspect-square rounded-sm"</p>
+<p class="p1"><span class="Apple-converted-space">                                                        </span>style={{ backgroundColor: getColorForValue(cell.value) }}</p>
+<p class="p1"><span class="Apple-converted-space">                                                        </span>title={`(${cell.x}, ${cell.y}): ${cell.value.toFixed(2)}`}</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;div className="flex justify-between mt-2 text-xs text-gray-400"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;span&gt;Low Similarity&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;span&gt;High Similarity&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;h3 className="text-lg font-semibold text-white mb-3"&gt;Node Connectivity&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;ResponsiveContainer width="100%" height={300}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;BarChart data={graphNodes}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;XAxis dataKey="id" stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;YAxis stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;Bar dataKey="degree" fill="#10B981" name="Node Degree" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;/BarChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'involution' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;Graph Involution Layers (GIN)&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;p className="text-gray-300 mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>Location-specific kernel generation with group-wise feature processing</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;ResponsiveContainer width="100%" height={400}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;BarChart data={involutionData}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;XAxis dataKey="layer" stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;YAxis stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Legend /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Bar dataKey="params" fill="#8B5CF6" name="Output Dimensions" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Bar dataKey="groups" fill="#A78BFA" name="Involution Groups" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/BarChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="mt-6 grid grid-cols-3 gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="bg-gray-700 p-4 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-gray-400 text-sm"&gt;Kernel Size (k)&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-2xl font-bold text-purple-400"&gt;7 neighbors&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="bg-gray-700 p-4 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-gray-400 text-sm"&gt;Total GIN Layers&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-2xl font-bold text-purple-400"&gt;3 layers&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="bg-gray-700 p-4 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-gray-400 text-sm"&gt;Group Configuration&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;p className="text-2xl font-bold text-purple-400"&gt;4-4-2&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'aggregation' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;Feature Aggregation Pipeline&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;ResponsiveContainer width="100%" height={400}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;LineChart data={aggregationData}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;XAxis dataKey="step" stroke="#9CA3AF" angle={-20} textAnchor="end" height={80} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;YAxis stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Line type="monotone" dataKey="value" stroke="#F59E0B" strokeWidth={3} dot={{ r: 8, fill: '#F59E0B' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/LineChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'architecture' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;Complete Network Architecture&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;ResponsiveContainer width="100%" height={400}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;LineChart data={featureReduction}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;XAxis dataKey="layer" stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;YAxis scale="log" domain={[1, 10000]} stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Line type="monotone" dataKey="features" stroke="#EF4444" strokeWidth={3} dot={{ r: 6 }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/LineChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>{activeModule === 'attention' &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h2 className="text-2xl font-bold text-white mb-4"&gt;Attention Mechanism&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;ResponsiveContainer width="100%" height={400}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;BarChart data={attentionWeights.slice(0, 16)}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;CartesianGrid strokeDasharray="3 3" stroke="#374151" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;XAxis dataKey="sample" stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;YAxis stroke="#9CA3AF" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;Bar dataKey="weight" name="Attention Weight"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>{attentionWeights.slice(0, 16).map((entry, index) =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">                                                    </span>&lt;Cell key={`cell-${index}`} fill={entry.weight &gt; 0.6 ? '#EAB308' : entry.weight &gt; 0.4 ? '#F59E0B' : '#EF4444'} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                                </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;/Bar&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/BarChart&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/ResponsiveContainer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div className="mt-8 text-center text-gray-400 text-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p&gt;Interactive visualization of Graph Involution Network for cervical cancer classification&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const root = ReactDOM.createRoot(document.getElementById('root'));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>root.render(&lt;ModuleVisualizer /&gt;);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
